@@ -23,6 +23,7 @@ import com.creative.trnt.alertbanner.AlertDialogForAnything;
 import com.creative.trnt.appdata.ApiUrl;
 import com.creative.trnt.appdata.AppConstant;
 import com.creative.trnt.appdata.AppController;
+import com.creative.trnt.eventListener.EndlessRecyclerViewScrollListener;
 import com.creative.trnt.model.Movie;
 import com.creative.trnt.model.Movies;
 import com.google.gson.Gson;
@@ -44,6 +45,8 @@ public class LatestMovieFragment extends Fragment {
     List<Movie> movieList = new ArrayList<>();
 
     private Gson gson;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public LatestMovieFragment() {
         // Required empty public constructor
@@ -72,7 +75,7 @@ public class LatestMovieFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
-        sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", null, null, null, null, null, "seeds", null));
+        sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", null, null, null, null, null, "seeds", null),true);
     }
 
     private void init(View view) {
@@ -90,21 +93,36 @@ public class LatestMovieFragment extends Fragment {
         //gridView.setAdapter(iconGridAdapter);
 
         int numberOfColumns = 3;
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),numberOfColumns);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
         recyclerViewAdapter = new RecyclerViewAdapter(movieList, getActivity());
         //adapter.setClickListener(this);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+               // loadNextDataFromApi(page);
+                Log.d("DEBUG",String.valueOf(page));
+                sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", String.valueOf(page), null, null, null, null, "seeds", null),false);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        recyclerView.addOnScrollListener(scrollListener);
     }
 
 
-    public void sendRequestToGetPlaceList(String url) {
+    public void sendRequestToGetPlaceList(String url,boolean need_to_show_progressbar) {
 
         Log.d("DEBUG", url);
 
         // TODO Auto-generated method stub
         // final ProgressBar progressBar = (ProgressBar)dialog_add_tag.findViewById(R.id.dialog_progressbar);
         //progressBar.setVisibility(View.VISIBLE);
-        showProgressDialog("loading..", true, false);
+        if(need_to_show_progressbar)showProgressDialog("loading..", true, false);
 
         final StringRequest req = new StringRequest(Request.Method.GET, url,
                 new com.android.volley.Response.Listener<String>() {

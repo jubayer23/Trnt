@@ -24,7 +24,7 @@ public class ApiUrl {
             parameter = parameter +  "limit=" + limit + "&";
         }
         if (page != null && !page.isEmpty()  ) {
-            parameter = parameter + page + "&";
+            parameter = parameter + "page="  + page + "&";
         }
 
         if ( quality != null && !quality.isEmpty() ) {
