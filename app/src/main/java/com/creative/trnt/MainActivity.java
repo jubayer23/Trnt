@@ -1,7 +1,10 @@
 package com.creative.trnt;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,18 +13,25 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.creative.trnt.eventListener.ToolbarElevationOffsetListener;
 import com.creative.trnt.fragment.LatestMovieFragment;
 import com.creative.trnt.fragment.TopRatedMovieFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,LatestMovieFragment.fragmentActivityCommunicator {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    public static final String TAG_LATEST_FRAGMENT = "Latest";
+    public static final String TAG_TOP_RATED_FRAGMENT = "Top rated";
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +47,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+       // AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.mAppBarLayout);
+        //mAppBarLayout.addOnOffsetChangedListener(new ToolbarElevationOffsetListener(this, getToolbar()));
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new LatestMovieFragment(), "Latest");
-        adapter.addFragment(new TopRatedMovieFragment(), "Top rated");
+        adapter.addFragment(new LatestMovieFragment(), TAG_LATEST_FRAGMENT);
+        adapter.addFragment(new TopRatedMovieFragment(), TAG_TOP_RATED_FRAGMENT);
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void changeMenuIcon(int id) {
+        menu.getItem(1).setIcon(getResources().getDrawable(id));
     }
 
 
@@ -91,4 +109,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
+
+    public boolean onCreateOptionsMenu(Menu paramMenu) {
+        this.menu = paramMenu;
+        getMenuInflater().inflate(R.menu.menu_main, paramMenu);
+        return true;
+    }
+
+
 }

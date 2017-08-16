@@ -15,7 +15,8 @@ public class ApiUrl {
             String query_term,
             String genre,
             String sort_by,
-            String order_buy
+            String order_buy,
+            String with_rt_ratings
     ) {
 
         String parameter = "?";
@@ -31,7 +32,7 @@ public class ApiUrl {
             parameter = parameter + quality + "&";
         }
         if (minimum_rating != null && !minimum_rating.isEmpty() ) {
-            parameter = parameter + minimum_rating + "&";
+            parameter = parameter +"minimum_rating=" + minimum_rating + "&";
         }
         if ( query_term != null && !query_term.isEmpty() ) {
             parameter = parameter + query_term + "&";
@@ -45,6 +46,10 @@ public class ApiUrl {
 
         if ( order_buy != null && !order_buy.isEmpty() ) {
             parameter = parameter + order_buy + "&";
+        }
+
+        if ( with_rt_ratings != null && !with_rt_ratings.isEmpty() ) {
+            parameter = parameter + "with_rt_ratings=" +with_rt_ratings + "&";
         }
 
         parameter = parameter.substring(0,parameter.length() - 1);

@@ -22,5 +22,6 @@
     <dimen name="border_height_big">2dp</dimen>
     <dimen name="corner_radius">2dp</dimen>
 
+    <dimen name="appbar_elevation">4dp</dimen>
 
 </resources>

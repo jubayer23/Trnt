@@ -1,27 +1,30 @@
 package com.creative.trnt.fragment;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.creative.trnt.R;
-import com.creative.trnt.adapter.IconGridAdapter;
 import com.creative.trnt.adapter.RecyclerViewAdapter;
 import com.creative.trnt.alertbanner.AlertDialogForAnything;
 import com.creative.trnt.appdata.ApiUrl;
-import com.creative.trnt.appdata.AppConstant;
 import com.creative.trnt.appdata.AppController;
 import com.creative.trnt.eventListener.EndlessRecyclerViewScrollListener;
 import com.creative.trnt.model.Movie;
@@ -37,6 +40,9 @@ import java.util.List;
 
 public class LatestMovieFragment extends Fragment {
 
+    private static final int  KEY_GRID_VIEW = 0;
+    private static final int  KEY_LIST_VIEW = 1;
+    private static  int  KEY_CURRENT_VIEW = KEY_GRID_VIEW;
     // private GridView gridView;
     private RecyclerView recyclerView;
     /// private IconGridAdapter iconGridAdapter;
@@ -46,7 +52,14 @@ public class LatestMovieFragment extends Fragment {
 
     private Gson gson;
 
-    private EndlessRecyclerViewScrollListener scrollListener;
+    private EndlessRecyclerViewScrollListener gridScrollListener;
+
+    private EndlessRecyclerViewScrollListener listScrollListener;
+
+    LinearLayoutManager listLayoutManager;
+    GridLayoutManager gridLayoutManager;
+
+    private FloatingActionButton fabTopToTheList;
 
     public LatestMovieFragment() {
         // Required empty public constructor
@@ -55,6 +68,7 @@ public class LatestMovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -75,7 +89,7 @@ public class LatestMovieFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
-        sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", null, null, null, null, null, "seeds", null),true);
+        sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", null, null, null, null, null, "seeds", null,null),true);
     }
 
     private void init(View view) {
@@ -83,6 +97,17 @@ public class LatestMovieFragment extends Fragment {
         gson = new Gson();
 
         // gridView = (GridView) view.findViewById(R.id.gridview_latestmovie);
+
+        fabTopToTheList = (FloatingActionButton) view.findViewById(R.id.fabTopToTheList);
+        fabTopToTheList.setVisibility(View.GONE);
+        fabTopToTheList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //recyclerView.scrollToPosition(0);
+                recyclerView.smoothScrollToPosition(0);
+                //recyclerView.setScrollY(0);
+            }
+        });
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
     }
@@ -92,26 +117,63 @@ public class LatestMovieFragment extends Fragment {
         // iconGridAdapter = new IconGridAdapter(getActivity(), movieList);
         //gridView.setAdapter(iconGridAdapter);
 
-        int numberOfColumns = 3;
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),numberOfColumns);
+        listLayoutManager = new LinearLayoutManager(getActivity());
+        listLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        final int numberOfColumns = 3;
+        gridLayoutManager = new GridLayoutManager(getActivity(),numberOfColumns);
+
         recyclerView.setLayoutManager(gridLayoutManager);
 
         recyclerViewAdapter = new RecyclerViewAdapter(movieList, getActivity());
-        //adapter.setClickListener(this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        gridScrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
                // loadNextDataFromApi(page);
                 Log.d("DEBUG",String.valueOf(page));
-                sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", String.valueOf(page), null, null, null, null, "seeds", null),false);
+                sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", String.valueOf(page), null, null, null, null, "seeds", null,null),false);
+            }
+
+            @Override
+            public void showUpArrow() {
+                if(fabTopToTheList.getVisibility() == View.GONE)
+                    fabTopToTheList.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void hideUpArrow() {
+
+                if(fabTopToTheList.getVisibility() == View.VISIBLE)
+                    fabTopToTheList.setVisibility(View.GONE);
+            }
+        };
+
+        listScrollListener = new EndlessRecyclerViewScrollListener(listLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                // loadNextDataFromApi(page);
+                Log.d("DEBUG",String.valueOf(page));
+                sendRequestToGetPlaceList(ApiUrl.getUrlForMovieList("50", String.valueOf(page), null, null, null, null, "seeds", null,null),false);
+            }
+
+            @Override
+            public void showUpArrow() {
+
+            }
+
+            @Override
+            public void hideUpArrow() {
+
             }
         };
         // Adds the scroll listener to RecyclerView
-        recyclerView.addOnScrollListener(scrollListener);
+        recyclerView.addOnScrollListener(gridScrollListener);
     }
 
 
@@ -161,6 +223,84 @@ public class LatestMovieFragment extends Fragment {
         // TODO Auto-generated method stub
         AppController.getInstance().addToRequestQueue(req);
     }
+
+
+    public void toggleGridViewListView(){
+        if(KEY_CURRENT_VIEW == KEY_GRID_VIEW){
+            //recyclerView.setLayoutManager(gridLayoutManager);
+           // recyclerView.addOnScrollListener(listScrollListener);
+            //recyclerViewAdapter.setListStyle(RecyclerViewAdapter.LIST);
+            //recyclerViewAdapter.notifyDataSetChanged();
+        }
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem paramMenuItem) {
+
+        switch (paramMenuItem.getItemId()) {
+
+            case R.id.action_toggle_gridview_listview:
+
+
+                if(KEY_CURRENT_VIEW == KEY_GRID_VIEW){
+                    inputChangeCallback.changeMenuIcon(R.drawable.ic_view_comfy_black_24dp);
+                    //menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.history_converted));
+                    KEY_CURRENT_VIEW = KEY_LIST_VIEW;
+                    recyclerView.setLayoutManager(listLayoutManager);
+                     recyclerView.addOnScrollListener(listScrollListener);
+                    recyclerViewAdapter.setListStyle(RecyclerViewAdapter.LIST);
+                    recyclerViewAdapter.notifyDataSetChanged();
+                }else if(KEY_CURRENT_VIEW == KEY_LIST_VIEW){
+                    inputChangeCallback.changeMenuIcon(R.drawable.ic_list_black_24dp);
+                    KEY_CURRENT_VIEW = KEY_GRID_VIEW;
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                    recyclerView.addOnScrollListener(gridScrollListener);
+                    recyclerViewAdapter.setListStyle(RecyclerViewAdapter.GRID);
+                    recyclerViewAdapter.notifyDataSetChanged();
+                }
+
+                break;
+            case R.id.action_search:
+                // startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.ydoodle.mymoneymanager")));
+                // Toast.makeText(MainActivity.this,"Please publish your app on play store first!",Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return false;
+    }
+    public interface fragmentActivityCommunicator {
+        /*To change something in activty*/
+         void changeMenuIcon(int id);
+
+    }
+
+    fragmentActivityCommunicator inputChangeCallback;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = getActivity();
+        try {
+            inputChangeCallback = (fragmentActivityCommunicator) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement onFragmentChangeListener");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private ProgressDialog progressDialog;
