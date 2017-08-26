@@ -32,7 +32,7 @@
                     android:adjustViewBounds="true"
                     fresco:actualImageScaleType="focusCrop"
                     fresco:placeholderImageScaleType="fitCenter"
-                    fresco:placeholderImage="@drawee/img_placeholder" />
+                    fresco:placeholderImage="@drawable/img_placeholder" />
 
             </LinearLayout>
 

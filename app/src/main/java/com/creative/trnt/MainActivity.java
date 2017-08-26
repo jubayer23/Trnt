@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void changeMenuIcon(int id) {
-        menu.getItem(1).setIcon(getResources().getDrawable(id));
+        menu.getItem(2).setIcon(getResources().getDrawable(id));
     }
 
 

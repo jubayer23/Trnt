@@ -43,6 +43,10 @@
         <item name="android:textSize">@dimen/font_small</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="textStyleSmallGray">
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
 
 
 

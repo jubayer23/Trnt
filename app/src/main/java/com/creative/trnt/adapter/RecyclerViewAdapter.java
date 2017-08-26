@@ -58,7 +58,7 @@ public class RecyclerViewAdapter
             ((ListViewHolder) paramViewHolder).tv_genre.setText("No genre");
         }
 
-        ((ListViewHolder) paramViewHolder).tv_rating.setText("Rating : " +String.valueOf(localHeavyMovie.getRating()));
+        ((ListViewHolder) paramViewHolder).tv_rating.setText(String.valueOf(localHeavyMovie.getRating()));
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup paramViewGroup, int paramInt) {
