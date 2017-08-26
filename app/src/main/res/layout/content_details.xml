@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/ll_container_genre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textStyleSmallWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Action" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/imdb" />
+
+        <TextView
+            android:id="@+id/tv_rate"
+            style="@style/textStyleSmallWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:lines="1"
+            android:text="9.0"
+            android:transitionName="rating" />
+
+        <TextView
+            android:id="@+id/tv_runtime"
+            style="@style/textStyleSmallWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="143 mins" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/textStyleSmallWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="720p" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/folder" />
+
+                <TextView
+                    android:id="@+id/tv_sev_size"
+                    style="@style/textStyleSmallWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="700.00 MB" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/seed" />
+
+                <TextView
+                    android:id="@+id/tv_sev_seed"
+                    style="@style/textStyleSmallWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="4452 Seeds" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/leech" />
+
+                <TextView
+                    android:id="@+id/tv_sev_leech"
+                    style="@style/textStyleSmallWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="2345 Leech" />
+            </LinearLayout>
+
+
+            <ru.dimorinny.floatingtextbutton.FloatingTextButton
+                android:id="@+id/btn_sev_magnet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                app:floating_background_color="@color/blue"
+                app:floating_icon="@mipmap/magnet"
+                app:floating_title="Copy"
+                app:floating_title_color="@android:color/white" />
+
+            <ru.dimorinny.floatingtextbutton.FloatingTextButton
+                android:id="@+id/btn_sev_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                app:floating_background_color="@color/blue"
+                app:floating_icon="@mipmap/download"
+                app:floating_title="Torrent"
+                app:floating_title_color="@android:color/white" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="70dp"
+            android:layout_marginRight="5dp"
+            android:background="@android:color/holo_blue_light" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/holo_blue_light" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/holo_blue_light" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                style="@style/textStyleSmallWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1080p" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/folder" />
+
+                <TextView
+                    android:id="@+id/tv_one_eight_size"
+                    style="@style/textStyleSmallWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="700.00 MB" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/seed" />
+
+                <TextView
+                    android:id="@+id/tv_one_eight_seed"
+                    style="@style/textStyleSmallWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="4452 Seeds" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="0dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/leech" />
+
+                <TextView
+                    android:id="@+id/tv_one_eight_leech"
+                    style="@style/textStyleSmallWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="2345 Leech" />
+            </LinearLayout>
+
+
+            <ru.dimorinny.floatingtextbutton.FloatingTextButton
+                android:id="@+id/btn_one_eight_magnet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                app:floating_background_color="@color/blue"
+                app:floating_icon="@mipmap/magnet"
+                app:floating_title="Copy"
+                app:floating_title_color="@android:color/white" />
+
+            <ru.dimorinny.floatingtextbutton.FloatingTextButton
+                android:id="@+id/btn_one_eight_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                app:floating_background_color="@color/blue"
+                app:floating_icon="@mipmap/download"
+                app:floating_title="Torrent"
+                app:floating_title_color="@android:color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

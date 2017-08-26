@@ -9,6 +9,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.creative.trnt.utils.LruBitmapCache;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.google.gson.Gson;
 
 
 public class AppController extends Application {
@@ -21,6 +22,8 @@ public class AppController extends Application {
 
     private static AppController mInstance;
 
+    private Gson gson;
+
     private float scale;
     @Override
     public void onCreate() {
@@ -30,6 +33,8 @@ public class AppController extends Application {
         this.scale = getResources().getDisplayMetrics().density;
 
         Fresco.initialize(getApplicationContext());
+
+        gson = new Gson();
     }
 
     public int getPixelValue(int dps) {
@@ -47,6 +52,14 @@ public class AppController extends Application {
         }
 
         return mRequestQueue;
+    }
+
+    public Gson getGson(){
+        if(gson == null){
+            gson = new Gson();
+        }
+
+        return gson;
     }
 
     public ImageLoader getImageLoader() {

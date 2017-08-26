@@ -1,11 +1,14 @@
 
 package com.creative.trnt.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -85,6 +88,41 @@ public class Movie {
     @SerializedName("date_uploaded_unix")
     @Expose
     private Integer dateUploadedUnix;
+
+    protected Movie(Parcel in) {
+        url = in.readString();
+        imdbCode = in.readString();
+        title = in.readString();
+        titleEnglish = in.readString();
+        titleLong = in.readString();
+        slug = in.readString();
+        genres = in.createStringArrayList();
+        summary = in.readString();
+        descriptionFull = in.readString();
+        synopsis = in.readString();
+        ytTrailerCode = in.readString();
+        language = in.readString();
+        mpaRating = in.readString();
+        backgroundImage = in.readString();
+        backgroundImageOriginal = in.readString();
+        smallCoverImage = in.readString();
+        mediumCoverImage = in.readString();
+        largeCoverImage = in.readString();
+        state = in.readString();
+        dateUploaded = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -294,4 +332,32 @@ public class Movie {
         this.dateUploadedUnix = dateUploadedUnix;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(url);
+        parcel.writeString(imdbCode);
+        parcel.writeString(title);
+        parcel.writeString(titleEnglish);
+        parcel.writeString(titleLong);
+        parcel.writeString(slug);
+        parcel.writeStringList(genres);
+        parcel.writeString(summary);
+        parcel.writeString(descriptionFull);
+        parcel.writeString(synopsis);
+        parcel.writeString(ytTrailerCode);
+        parcel.writeString(language);
+        parcel.writeString(mpaRating);
+        parcel.writeString(backgroundImage);
+        parcel.writeString(backgroundImageOriginal);
+        parcel.writeString(smallCoverImage);
+        parcel.writeString(mediumCoverImage);
+        parcel.writeString(largeCoverImage);
+        parcel.writeString(state);
+        parcel.writeString(dateUploaded);
+    }
 }

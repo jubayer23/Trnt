@@ -1,10 +1,13 @@
 
 package com.creative.trnt.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Movies {
+public class Movies implements Parcelable{
 
     @SerializedName("status")
     @Expose
@@ -18,6 +21,25 @@ public class Movies {
     @SerializedName("@meta")
     @Expose
     private Meta meta;
+
+    protected Movies(Parcel in) {
+        status = in.readString();
+        statusMessage = in.readString();
+        data = in.readParcelable(Data.class.getClassLoader());
+        meta = in.readParcelable(Meta.class.getClassLoader());
+    }
+
+    public static final Creator<Movies> CREATOR = new Creator<Movies>() {
+        @Override
+        public Movies createFromParcel(Parcel in) {
+            return new Movies(in);
+        }
+
+        @Override
+        public Movies[] newArray(int size) {
+            return new Movies[size];
+        }
+    };
 
     public String getStatus() {
         return status;
@@ -51,4 +73,16 @@ public class Movies {
         this.meta = meta;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(status);
+        parcel.writeString(statusMessage);
+        parcel.writeParcelable(data, i);
+        parcel.writeParcelable(meta, i);
+    }
 }

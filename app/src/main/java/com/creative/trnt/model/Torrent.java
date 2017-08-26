@@ -1,10 +1,13 @@
 
 package com.creative.trnt.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Torrent {
+public class Torrent implements Parcelable{
 
     @SerializedName("url")
     @Expose
@@ -33,6 +36,27 @@ public class Torrent {
     @SerializedName("date_uploaded_unix")
     @Expose
     private Integer dateUploadedUnix;
+
+    protected Torrent(Parcel in) {
+        url = in.readString();
+        hash = in.readString();
+        quality = in.readString();
+        size = in.readString();
+        sizeBytes = in.readLong();
+        dateUploaded = in.readString();
+    }
+
+    public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
+        @Override
+        public Torrent createFromParcel(Parcel in) {
+            return new Torrent(in);
+        }
+
+        @Override
+        public Torrent[] newArray(int size) {
+            return new Torrent[size];
+        }
+    };
 
     public String getUrl() {
         return url;
@@ -106,4 +130,18 @@ public class Torrent {
         this.dateUploadedUnix = dateUploadedUnix;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(url);
+        parcel.writeString(hash);
+        parcel.writeString(quality);
+        parcel.writeString(size);
+        parcel.writeLong(sizeBytes);
+        parcel.writeString(dateUploaded);
+    }
 }

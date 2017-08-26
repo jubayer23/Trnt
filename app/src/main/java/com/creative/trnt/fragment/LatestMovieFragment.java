@@ -3,7 +3,9 @@ package com.creative.trnt.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -21,12 +23,15 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.creative.trnt.DetailsActivity;
 import com.creative.trnt.R;
 import com.creative.trnt.adapter.RecyclerViewAdapter;
 import com.creative.trnt.alertbanner.AlertDialogForAnything;
 import com.creative.trnt.appdata.ApiUrl;
+import com.creative.trnt.appdata.AppConstant;
 import com.creative.trnt.appdata.AppController;
 import com.creative.trnt.eventListener.EndlessRecyclerViewScrollListener;
+import com.creative.trnt.eventListener.RecyclerItemClickListener;
 import com.creative.trnt.model.Movie;
 import com.creative.trnt.model.Movies;
 import com.google.gson.Gson;
@@ -79,6 +84,8 @@ public class LatestMovieFragment extends Fragment {
         init(view);
 
         initAdapter();
+
+        initRecyclerViewClickListener();
 
         return view;
         // Inflate the layout for this fragment
@@ -177,9 +184,29 @@ public class LatestMovieFragment extends Fragment {
     }
 
 
-    public void sendRequestToGetPlaceList(String url,boolean need_to_show_progressbar) {
+    private void initRecyclerViewClickListener() {
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // do whatever
+                        Movie movie = movieList.get(position);
+                        String movieResponse = gson.toJson(movie);
+                        Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                        intent.putExtra(AppConstant.KEY_EXTRA_MOVIE_JSON,movieResponse);
+                        startActivity(intent);
+                    }
 
-        Log.d("DEBUG", url);
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+    }
+
+
+    public void sendRequestToGetPlaceList(String url,boolean need_to_show_progressbar) {
 
         // TODO Auto-generated method stub
         // final ProgressBar progressBar = (ProgressBar)dialog_add_tag.findViewById(R.id.dialog_progressbar);

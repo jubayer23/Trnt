@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.creative.trnt.eventListener.ToolbarElevationOffsetListener;
 import com.creative.trnt.fragment.LatestMovieFragment;
 import com.creative.trnt.fragment.TopRatedMovieFragment;
 
