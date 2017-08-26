@@ -1,5 +1,8 @@
 package com.creative.trnt;
 
+
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,10 +17,13 @@ import com.creative.trnt.model.Movie;
 import com.creative.trnt.model.Torrent;
 import com.creative.trnt.utils.TorrentDownloader;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.github.clans.fab.FloatingActionButton;
+
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
@@ -35,8 +41,15 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     LinearLayout ll_container_genre;
 
+    FloatingActionButton fab_add_to_wishlist, fab_share_link;
+
+    android.support.design.widget.FloatingActionButton  fab_youtube;
+
     private static final int KEY_FILE_TYPE_SEVENT_TWENTY = 0;
     private static final int KEY_FILE_TYPE_ONE_EIGHT = 1;
+
+    private static final String TAG_ADD_TO_WISHLIST = "Add to wishlist";
+    private static final String TAG_REMOVE_FROM_WISHLIST = "Remove from wishlist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +63,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
         updateUi();
 
+        updateFloatingActionButtonStatus();
+
         initClickListener();
+
     }
 
 
@@ -77,6 +93,15 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         btn_sev_magnet = (FloatingTextButton) findViewById(R.id.btn_sev_magnet);
         btn_one_eight_download = (FloatingTextButton) findViewById(R.id.btn_one_eight_download);
         btn_one_eight_magnet = (FloatingTextButton) findViewById(R.id.btn_one_eight_magnet);
+
+        fab_add_to_wishlist = (FloatingActionButton) findViewById(R.id.fab_add_to_wishlist);
+        fab_add_to_wishlist.setOnClickListener(this);
+        fab_share_link = (FloatingActionButton) findViewById(R.id.fab_share_link);
+        fab_share_link.setOnClickListener(this);
+
+        fab_youtube = (android.support.design.widget.FloatingActionButton) findViewById(R.id.fab_youtube);
+        fab_youtube.setOnClickListener(this);
+
     }
 
 
@@ -118,6 +143,23 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+
+    private void updateFloatingActionButtonStatus(){
+
+        fab_add_to_wishlist.setLabelText(TAG_ADD_TO_WISHLIST);
+
+        List<Movie> wishListMovies = AppController.getInstance().getPrefManger().getWishListMovies();
+
+        for(Movie wishListMovie: wishListMovies){
+
+            if(String.valueOf(wishListMovie.getId()).equals(String.valueOf( movie.getId()))){
+                fab_add_to_wishlist.setImageResource(R.drawable.ic_favorite_white);
+                fab_add_to_wishlist.setLabelText(TAG_REMOVE_FROM_WISHLIST);
+                break;
+            }
+        }
+    }
+
     private void initClickListener() {
         btn_sev_download.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,32 +196,34 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        Log.d("DEBUG", "called 0");
 
-        String movieName;
-        if (movie.getTitleEnglish() != null) {
-            movieName = movie.getTitleEnglish();
-        } else {
-            movieName = movie.getTitle();
-        }
+        if (id == R.id.fab_add_to_wishlist) {
 
-        if (id == R.id.btn_sev_download) {
-            Torrent torrent = movie.getTorrents().get(0);
-            Log.d("DEBUG", "called 1");
-            try {
-                Log.d("DEBUG", "called 2");
-                String mUrl = generateMagneticUrl(torrent.getHash(), movieName);
-                Log.e("TAG", "720p magnet url = " + mUrl);
-                new TorrentDownloader().openMagneturi(mUrl, DetailsActivity.this);
-                Log.d("DEBUG", "called 3");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                Log.d("DEBUG", "called 4");
+            List<Movie> wishListMovies = AppController.getInstance().getPrefManger().getWishListMovies();
+
+
+            if(fab_add_to_wishlist.getLabelText().equalsIgnoreCase(TAG_REMOVE_FROM_WISHLIST)){
+                for(Movie wishListMovie: wishListMovies){
+                    if(wishListMovie.getId() == movie.getId()){
+                        wishListMovies.remove(wishListMovie);
+                        break;
+                    }
+                }
+                fab_add_to_wishlist.setLabelText(TAG_ADD_TO_WISHLIST);
+                fab_add_to_wishlist.setImageResource(R.drawable.ic_favorite_border_white);
+            }else{
+                wishListMovies.add(movie);
+                fab_add_to_wishlist.setLabelText(TAG_REMOVE_FROM_WISHLIST);
+                fab_add_to_wishlist.setImageResource(R.drawable.ic_favorite_white);
             }
+            AppController.getInstance().getPrefManger().setWishListMovies(wishListMovies);
         }
 
-        if (id == R.id.btn_sev_magnet) {
-
+        if (id == R.id.fab_youtube) {
+            if(movie.getYtTrailerCode() != null  && !movie.getYtTrailerCode().isEmpty()){
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + movie.getYtTrailerCode()));
+                startActivity(intent);
+            }
         }
     }
 

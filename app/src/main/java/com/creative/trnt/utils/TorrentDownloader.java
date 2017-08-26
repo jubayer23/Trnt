@@ -45,7 +45,7 @@ public class TorrentDownloader {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
 
-        alertDialog.setTitle("Error");
+        alertDialog.setTitle("Alert");
 
         alertDialog.setMessage("You dont have any utorren software in your device. Do you want to download it or just want to download the torrent file in your device?");
 
@@ -73,7 +73,7 @@ public class TorrentDownloader {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
 
-        alertDialog.setTitle("Error");
+        alertDialog.setTitle("Alert");
 
         alertDialog.setMessage("Do you want to download torrent file or you want to direct download using uTorrent android app?");
 

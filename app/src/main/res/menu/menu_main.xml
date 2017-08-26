@@ -10,6 +10,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_wishlist"
+        android:icon="@drawable/ic_favorite_white"
+        android:title="Favourite"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_toggle_gridview_listview"
         android:icon="@drawable/ic_list_black_24dp"
         android:title="Toggle"

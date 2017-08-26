@@ -5,11 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.creative.trnt.DetailsActivity;
 import com.creative.trnt.R;
+import com.creative.trnt.WishListActivity;
 import com.creative.trnt.adapter.RecyclerViewAdapter;
 import com.creative.trnt.alertbanner.AlertDialogForAnything;
 import com.creative.trnt.appdata.ApiUrl;
@@ -81,11 +81,14 @@ public class LatestMovieFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_latestmovie, container, false);
+
         init(view);
 
         initAdapter();
 
-        initRecyclerViewClickListener();
+        initRecyclerViewOnItemClickListener();
+
+        ViewCompat.setNestedScrollingEnabled(recyclerView, true);
 
         return view;
         // Inflate the layout for this fragment
@@ -184,7 +187,7 @@ public class LatestMovieFragment extends Fragment {
     }
 
 
-    private void initRecyclerViewClickListener() {
+    private void initRecyclerViewOnItemClickListener() {
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -291,6 +294,10 @@ public class LatestMovieFragment extends Fragment {
                 break;
             case R.id.action_search:
                 // startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=com.ydoodle.mymoneymanager")));
+                // Toast.makeText(MainActivity.this,"Please publish your app on play store first!",Toast.LENGTH_LONG).show();
+                break;
+            case R.id.action_wishlist:
+                   startActivity(new Intent(getActivity(), WishListActivity.class));
                 // Toast.makeText(MainActivity.this,"Please publish your app on play store first!",Toast.LENGTH_LONG).show();
                 break;
         }

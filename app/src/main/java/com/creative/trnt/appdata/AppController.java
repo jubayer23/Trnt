@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.creative.trnt.sharedprefs.PrefManager;
 import com.creative.trnt.utils.LruBitmapCache;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.gson.Gson;
@@ -25,6 +26,8 @@ public class AppController extends Application {
     private Gson gson;
 
     private float scale;
+
+    private PrefManager pref;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,7 +38,18 @@ public class AppController extends Application {
         Fresco.initialize(getApplicationContext());
 
         gson = new Gson();
+
+        pref = new PrefManager(this);
     }
+
+    public PrefManager getPrefManger() {
+        if (pref == null) {
+            pref = new PrefManager(this);
+        }
+
+        return pref;
+    }
+
 
     public int getPixelValue(int dps) {
         int pixels = (int) (dps * scale + 0.5f);
